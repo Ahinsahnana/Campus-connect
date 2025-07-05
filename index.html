@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Campus Connect - Your one-stop platform for campus services." />
+  <meta name="keywords" content="Campus Connect, food delivery, laundry, tutoring, university services" />
+  <meta name="author" content="Ahinsah Nana" />
+  <title>Campus Connect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+    }
+    .navbar {
+      background-color: #4f46e5;
+    }
+    .navbar-brand, .navbar-text, .btn-outline-light {
+      color: #fff;
+    }
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    .hero {
+      background-color: #eef2ff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      margin-top: 10px;
+      color: #4b5563;
+    }
+    .services-section {
+      padding: 40px 20px;
+      background-color: #ffffff;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h5 {
+      font-weight: 600;
+    }
+    .footer {
+      background-color: #1f2937;
+      color: white;
+      padding: 20px 0;
+    }
+    .footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    .btn-service {
+      background-color: #4f46e5;
+      color: white;
+      margin-top: 10px;
+    }
+    .btn-service:hover {
+      background-color: #4338ca;
+    }
+    .card img {
+      height: 140px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+<!-- Logo Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
+  <div class="container d-flex align-items-center">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/logo.png" alt="Campus Connect Logo">
+      <span class="fw-bold fs-4">Campus Connect</span>
+    </a>
+    <div class="ms-auto d-flex gap-2">
+      <a href="login.html" id="login-btn" class="btn btn-outline-light">Login</a>
+      <a href="signup.html" id="signup-btn" class="btn btn-outline-light">Sign Up</a>
+      <a href="dashboard.html" class="btn btn-light">Dashboard</a>
+      <button id="logout-btn" class="btn btn-danger" style="display: none;">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <h1>Welcome to Campus Connect</h1>
+  <p>Your trusted platform for accessing all essential campus services.</p>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+  <div class="container">
+    <h2 class="text-center mb-5">Campus Services</h2>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/food.jpg" class="img-fluid mb-2" alt="Food Delivery">
+          <h5>Food Delivery</h5>
+          <p>Order meals from campus vendors.</p>
+          <a href="food-delivery.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/printing.jpg" class="img-fluid mb-2" alt="Printing">
+          <h5>Printing</h5>
+          <p>Print your documents quickly and easily.</p>
+          <a href="printing.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/laundry.jpg" class="img-fluid mb-2" alt="Laundry">
+          <h5>Laundry</h5>
+          <p>Get your clothes cleaned by pros.</p>
+          <a href="laundry.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/data.jpg" class="img-fluid mb-2" alt="Data Bundle">
+          <h5>Data Bundle</h5>
+          <p>Top up your mobile data conveniently.</p>
+          <a href="data-bundle.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/tutor.jpg" class="img-fluid mb-2" alt="Private Tutor">
+          <h5>Private Tutor</h5>
+          <p>Find tutors to help with your courses.</p>
+          <a href="personal-tutor.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/assignment.jpg" class="img-fluid mb-2" alt="Assignment Help">
+          <h5>Assignment Help</h5>
+          <p>Get academic support for your assignments.</p>
+          <a href="asignment-help.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/hostel.jpg" class="img-fluid mb-2" alt="Hostel">
+          <h5>Hostel</h5>
+          <p>Book or manage hostel accommodation.</p>
+          <a href="hostel.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/tech.jpg" class="img-fluid mb-2" alt="Tech Hub">
+          <h5>Tech Hub</h5>
+          <p>Access IT services and resources.</p>
+          <a href="techhub.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/pharmacy.jpg" class="img-fluid mb-2" alt="Pharmacy">
+          <h5>Pharmacy</h5>
+          <p>Pharmaceutical Deliveries.</p>
+          <a href="pharmacy.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card p-3 text-center">
+          <img src="images/services/gas.jpg" class="img-fluid mb-2" alt="Gas Filling">
+          <h5>Gas Filling</h5>
+          <p>Gas Filling & Delivery Services.</p>
+          <a href="gas-delivery.html" class="btn btn-service">Order Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="container my-5">
+  <h2 class="text-center mb-4">About Campus Connect</h2>
+  <div class="card p-4">
+    <p>
+      Campus Connect is a student-led platform that helps connect students with daily campus services. From food delivery to academic support, our mission is to make campus life seamless and efficient.
+    </p>
+    <p>
+      We support vendors and enable admins to manage operations with transparency. Students benefit from quick access to essential services at affordable rates.
+    </p>
+    <a href="mailto:ahinsahnana7@gmail.com" class="btn btn-primary mt-3">Contact Us</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer text-center">
+  <div class="container">
+    <p>© 2025 Campus Connect. All rights reserved.</p>
+    <p>Contact: +233553962256 | Email: <a href="mailto:ahinsahnana7@gmail.com">ahinsahnana7@gmail.com</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { auth } from './js/firebase.js';
+  import { onAuthStateChanged, signOut } from 'firebase/auth';
+
+  const loginBtn = document.getElementById('login-btn');
+  const signupBtn = document.getElementById('signup-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginBtn.style.display = 'none';
+      signupBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+    } else {
+      loginBtn.style.display = 'inline-block';
+      signupBtn.style.display = 'inline-block';
+      logoutBtn.style.display = 'none';
+    }
+  });
+
+  logoutBtn?.addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    } catch (error) {
+      alert('Logout failed: ' + error.message);
+    }
+  });
+</script>
+</body>
+</html>

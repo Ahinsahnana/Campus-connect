@@ -1,0 +1,231 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.navbar {
+  background-color: #232f3e;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-brand,
+.nav-link,
+.navbar-text {
+  color: white !important;
+}
+
+.service-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.section {
+  display: block;
+}
+
+.section.hidden {
+  display: none;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Login/Signup Styles */
+.login-bg-decor {
+  position: fixed;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}
+
+.login-bg-decor span {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.25;
+  filter: blur(40px);
+  animation: float 12s infinite alternate;
+}
+
+.login-bg-decor .circle1 {
+  background: #6366f1;
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  left: -100px;
+}
+
+.login-bg-decor .circle2 {
+  background: #f472b6;
+  width: 300px;
+  height: 300px;
+  bottom: 50px;
+  right: 80px;
+  animation-delay: 2s;
+}
+
+.login-bg-decor .circle3 {
+  background: #34d399;
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  left: 10%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-30px) scale(1.05);
+  }
+}
+
+.aesthetic-login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: relative;
+}
+
+.aesthetic-login-box {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  border-radius: 24px;
+  padding: 48px 36px 36px 36px;
+  max-width: 370px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 0.2s;
+}
+
+.aesthetic-login-box:hover {
+  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.18);
+}
+
+.aesthetic-login-box h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #6366f1;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.aesthetic-login-box p {
+  color: #64748b;
+  margin-bottom: 28px;
+  font-size: 1.05rem;
+}
+
+.aesthetic-login-box .input-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.aesthetic-login-box label {
+  font-size: 0.98rem;
+  color: #6366f1;
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.aesthetic-login-box input,
+.aesthetic-login-box select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f8fafc;
+  transition: border 0.2s;
+  margin-bottom: 2px;
+}
+
+.aesthetic-login-box input:focus,
+.aesthetic-login-box select:focus {
+  border: 1.5px solid #6366f1;
+  outline: none;
+  background: #fff;
+}
+
+.aesthetic-login-box button {
+  width: 100%;
+  padding: 12px 0;
+  background: linear-gradient(90deg, #6366f1 60%, #f472b6 100%);
+  color: white;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+  transition: background 0.2s;
+}
+
+.aesthetic-login-box button:hover {
+  background: linear-gradient(90deg, #4f46e5 60%, #ec4899 100%);
+}
+
+.aesthetic-login-box .login-tip {
+  margin-top: 18px;
+  font-size: 0.98rem;
+  color: #64748b;
+}
+
+.aesthetic-login-box .login-tip a {
+  color: #6366f1;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.aesthetic-login-box #aesthetic-auth-error {
+  display: none;
+  color: #fd5e53;
+  margin-top: 10px;
+  font-size: 0.98rem;
+  min-height: 22px;
+}
+
+#three-login-canvas {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+}
+
+@media (max-width: 600px) {
+  .aesthetic-login-box {
+    padding: 32px 10px 24px 10px;
+    max-width: 98vw;
+  }
+}
+body {
+  background: url('public/logo_transparent.png') no-repeat center center fixed;
+  background-size: contain;
+  background-color: rgba(255, 255, 255, 0.95);
+}

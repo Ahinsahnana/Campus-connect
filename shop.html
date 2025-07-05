@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Connect - Shop</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body {
+      background: linear-gradient(to right, #f0f4ff, #e6ecff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .shop-header {
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 40px;
+    }
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .btn-primary {
+      border-radius: 30px;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      background: #f8f9fa;
+      text-align: center;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+    <div class="container d-flex align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo-campusconnect.png" alt="Campus Connect Logo" style="height: 40px; margin-right: 10px;" />
+        <span class="fw-bold fs-4">Campus Connect</span>
+      </a>
+      <div class="ms-auto">
+        <a href="login.html" class="btn btn-outline-light me-2">Logout</a>
+        <a href="dashboard.html" class="btn btn-light">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="text-center shop-header">Campus Shop</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/laptop.jpg" class="card-img-top" alt="Laptop">
+          <div class="card-body">
+            <h5 class="card-title">Laptop</h5>
+            <p class="card-text">High-performance student laptop.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/hoodie.jpg" class="card-img-top" alt="Campus Hoodie">
+          <div class="card-body">
+            <h5 class="card-title">Campus Hoodie</h5>
+            <p class="card-text">Comfortable hoodie with university logo.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/bundle.jpg" class="card-img-top" alt="Data Bundle">
+          <div class="card-body">
+            <h5 class="card-title">Data Bundle</h5>
+            <p class="card-text">Affordable campus internet bundles.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/stationery.jpg" class="card-img-top" alt="Stationery Kit">
+          <div class="card-body">
+            <h5 class="card-title">Stationery Kit</h5>
+            <p class="card-text">Notebook, pens, highlighters for lectures.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/headphones.jpg" class="card-img-top" alt="Headphones">
+          <div class="card-body">
+            <h5 class="card-title">Wireless Headphones</h5>
+            <p class="card-text">Perfect for study and relaxation.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100">
+          <img src="images/snacks.jpg" class="card-img-top" alt="Campus Snacks">
+          <div class="card-body">
+            <h5 class="card-title">Campus Snacks</h5>
+            <p class="card-text">Tasty and affordable snacks for in-between classes.</p>
+            <a href="#" class="btn btn-primary w-100">Buy Now</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+  </footer>
+  <script type="module">
+  import { db } from "./js/firebase.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  document.querySelector("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("full-name").value;
+    const phone = document.getElementById("phone").value;
+    const subject = document.getElementById("subject").value;
+    const deadline = document.getElementById("deadline").value;
+    const instructions = document.getElementById("instructions").value;
+
+    // Set base price + 5 GHS per day remaining
+    const daysLeft = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+    const price = 20 + (daysLeft > 0 ? 5 * daysLeft : 0);
+
+    try {
+      const docRef = await addDoc(collection(db, "assignmentRequests"), {
+        name,
+        phone,
+        subject,
+        deadline,
+        instructions,
+        price,
+        timestamp: serverTimestamp()
+      });
+
+      // Redirect to payment page with pre-filled values
+      const params = new URLSearchParams({
+        orderType: "assignment",
+        amount: price,
+        name: name.replace(/\s+/g, "-") + "-" + subject.replace(/\s+/g, "-")
+      });
+      window.location.href = `payment.html?${params.toString()}`;
+    } catch (err) {
+      alert("Failed to submit. Please try again.");
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>
+</body>
+</html>

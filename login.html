@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Campus Connect - Login to access campus services.">
+  <meta name="keywords" content="login, campus services, campus connect">
+  <meta name="author" content="Ahinsah Nana">
+  <img src="images/logo.png" alt="Campus Connect Logo" style="width: 100px; display: block; margin: 0 auto 10px auto;" />
+<h1 id="form-title">Welcome to Campus Connect</h1>
+  <title>Campus Connect - Login</title>
+
+  <!-- Fonts & Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #eef1f5, #dbe4ec);
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    .login-bg-decor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .login-bg-decor span {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: float 10s ease-in-out infinite alternate;
+    }
+
+    .circle1 {
+      width: 200px;
+      height: 200px;
+      background: #4f46e5;
+      top: 10%;
+      left: 5%;
+    }
+
+    .circle2 {
+      width: 300px;
+      height: 300px;
+      background: #6366f1;
+      top: 50%;
+      left: 80%;
+    }
+
+    .circle3 {
+      width: 150px;
+      height: 150px;
+      background: #3b82f6;
+      top: 80%;
+      left: 20%;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    .aesthetic-login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .aesthetic-login-box {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    #form-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+
+    #form-subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #6366f1;
+      outline: none;
+    }
+
+    #aesthetic-auth-action {
+      background-color: #4f46e5;
+      color: white;
+      width: 100%;
+      padding: 0.75rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      transition: background-color 0.2s ease;
+    }
+
+    #aesthetic-auth-action:hover {
+      background-color: #4338ca;
+    }
+
+    #aesthetic-auth-error {
+      color: red;
+      font-size: 0.875rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .login-tip {
+      text-align: center;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+
+    .login-tip a {
+      color: #4f46e5;
+      text-decoration: none;
+    }
+
+    .login-tip a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      margin-top: 2rem;
+    }
+
+    .footer a {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-bg-decor">
+    <span class="circle1"></span>
+    <span class="circle2"></span>
+    <span class="circle3"></span>
+  </div>
+
+  <div class="aesthetic-login-container" id="aesthetic-login-container">
+    <form class="aesthetic-login-box" id="aesthetic-auth-form" autocomplete="on">
+      <h1 id="form-title">Welcome to Campus Connect</h1>
+      <p id="form-subtitle">Sign in to access campus services.</p>
+
+      <div class="input-group">
+        <label for="aesthetic-auth-email">Email</label>
+        <input id="aesthetic-auth-email" type="email" required autocomplete="username" placeholder="your.email@campus.com" />
+      </div>
+
+      <div class="input-group">
+        <label for="aesthetic-auth-password">Password</label>
+        <input id="aesthetic-auth-password" type="password" required autocomplete="current-password" placeholder="Password" />
+      </div>
+
+      <div class="input-group">
+  <label for="role-select">Role</label>
+  <input list="roles" id="role-select" name="role" required placeholder="Select your role" />
+  <datalist id="roles">
+    <option value="User">
+    <option value="Admin">
+    <option value="Service Provider">
+  </datalist>
+</div>
+
+      <button type="submit" id="aesthetic-auth-action">Login</button>
+      <p id="aesthetic-auth-error"></p>
+      <p class="login-tip">Don't have an account? <a href="signup.html" id="aesthetic-toggle-auth">Sign up here</a></p>
+    </form>
+  </div>
+
+  <footer class="footer bg-dark text-white text-center py-3">
+    <div class="container">
+      <p>© 2025 Campus Connect. All rights reserved.</p>
+      <p>Contact: +233553962256 | Email: <a href="mailto:ahinsahnana7@gmail.com" class="text-white">ahinsahnana7@gmail.com</a></p>
+    </div>
+  </footer>
+
+  <!-- Firebase & Bootstrap Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
+ 

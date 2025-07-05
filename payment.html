@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Connect - Payment</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f6f9fc, #e9efff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .payment-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    .form-label {
+      font-weight: 600;
+    }
+    .btn-success {
+      border-radius: 30px;
+      padding: 10px 30px;
+      font-size: 1.1rem;
+    }
+    h2 {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .form-check-label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+    <div class="container d-flex align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo-campusconnect.png" alt="Campus Connect Logo" style="height: 40px; margin-right: 10px;" />
+        <span class="fw-bold fs-4">Campus Connect</span>
+      </a>
+      <div class="ms-auto">
+        <a href="login.html" class="btn btn-outline-light me-2">Logout</a>
+        <a href="dashboard.html" class="btn btn-light">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="payment-card">
+          <h2 class="text-center mb-4">Pay for Your Orders</h2>
+          <form id="payment-form">
+            <div class="mb-3">
+              <label for="order-id" class="form-label">Order ID</label>
+              <input type="text" class="form-control" id="order-id" placeholder="Enter your order ID" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount (GHS)</label>
+              <input type="number" class="form-control" id="amount" placeholder="Enter amount" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="order-type" class="form-label">Order Type</label>
+              <select id="order-type" class="form-select" required>
+                <option value="assignment">Assignment Help</option>
+                <option value="hostel">Hostel</option>
+                <option value="tech">Tech Hub</option>
+                <option value="food">Food Delivery</option>
+                <option value="laundry">Laundry</option>
+                <option value="pharmacy">Pharmacy</option>
+                <option value="tutor">Private Tutor</option>
+                <option value="printing">Printing</option>
+                <option value="data">Data Bundle</option>
+                <option value="gas">Gas Filling</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Choose Payment Method</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment-method" id="momo" value="Mobile Money" required>
+                <label class="form-check-label" for="momo">Mobile Money (MTN/Vodafone/AirtelTigo)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment-method" id="card" value="Card">
+                <label class="form-check-label" for="card">Debit/Credit Card (Visa, Mastercard)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment-method" id="paypal" value="PayPal">
+                <label class="form-check-label" for="paypal">PayPal</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment-method" id="bank" value="Bank Transfer">
+                <label class="form-check-label" for="bank">Bank Transfer</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment-method" id="campus-pay" value="Campus Pay">
+                <label class="form-check-label" for="campus-pay">Campus Pay (Pay on delivery)</label>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-success">Proceed to Pay</button>
+            </div>
+          </form>
+
+          <div id="payment-status" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Extract query param
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Auto-fill on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const orderType = getQueryParam('orderType');
+      const amount = getQueryParam('amount');
+      const name = getQueryParam('name');
+      const subject = getQueryParam('subject');
+      const paymentMethod = getQueryParam('paymentMethod');
+
+      if (orderType) document.getElementById('order-type').value = orderType.toLowerCase();
+      if (amount) document.getElementById('amount').value = amount;
+
+      if (name && subject) {
+        const id = `${name.split(' ')[0]}-${subject.split(' ')[0]}-${Date.now().toString().slice(-5)}`;
+        document.getElementById('order-id').value = id;
+      } else if (name) {
+        document.getElementById('order-id').value = name;
+      }
+
+      // Auto-select payment method
+      if (paymentMethod) {
+        const input = document.querySelector(`input[name="payment-method"][value="${paymentMethod}"]`);
+        if (input) input.checked = true;
+      }
+    });
+
+    // Handle form submission
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const orderId = document.getElementById('order-id').value.trim();
+      const amount = document.getElementById('amount').value;
+      const type = document.getElementById('order-type').value;
+      const method = document.querySelector('input[name="payment-method"]:checked').value;
+      const status = document.getElementById('payment-status');
+
+      status.innerHTML = `<div class='alert alert-info text-center'>Processing GHS ${amount} payment for ${type} using ${method} (Order ID: ${orderId})...</div>`;
+
+      setTimeout(() => {
+        status.innerHTML = `<div class='alert alert-success text-center'>Payment successful! You paid GHS ${amount} for ${type} via ${method}.</div>`;
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

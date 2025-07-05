@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Campus Connect - Gas Filling</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fff7ed, #fefefe);
+    }
+    .navbar {
+      background-color: #f59e0b;
+    }
+    .navbar-brand, .btn-outline-light {
+      color: #fff !important;
+    }
+    .gas-form-container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      padding: 40px 30px;
+    }
+    h2 {
+      font-weight: bold;
+      color: #b45309;
+      margin-bottom: 25px;
+    }
+    .btn-warning {
+      border-radius: 30px;
+      font-weight: 600;
+      background-color: #f59e0b;
+      border: none;
+    }
+    .btn-warning:hover {
+      background-color: #d97706;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      background: #fef3c7;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Logo Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/logo.png" alt="Campus Connect Logo" style="height: 40px; margin-right: 10px;" />
+      <span class="fw-bold fs-4">Campus Connect</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Form Container -->
+<div class="container gas-form-container">
+  <h2 class="text-center">Gas Filling Request</h2>
+
+  <form onsubmit="redirectToPayment(event)">
+    <input type="hidden" id="order-type" value="Gas Filling">
+
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" id="name" class="form-control" placeholder="Your name" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Phone Number</label>
+      <input type="tel" class="form-control" placeholder="e.g. 024xxxxxxx" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Location / Hall</label>
+      <input type="text" class="form-control" placeholder="e.g. Valco Hall, Room B5" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Select Cylinder Size</label>
+      <select id="cylinder" class="form-select" onchange="updateAmount()" required title="Select Cylinder Size">
+        <option value="">-- Choose Size --</option>
+        <option value="30">3kg - GHS 30</option>
+        <option value="60">6kg - GHS 60</option>
+        <option value="90">9kg - GHS 90</option>
+        <option value="120">12kg - GHS 120</option>
+      </select>
+    </div>
+
+    <input type="hidden" id="amount" value="0">
+
+    <div class="mb-3">
+      <label class="form-label">Preferred Delivery Date</label>
+      <input type="date" class="form-control" id="delivery-date" required title="Preferred Delivery Date" placeholder="Select delivery date">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Preferred Delivery Time</label>
+      <input type="time" class="form-control" id="delivery-time" required title="Preferred Delivery Time" placeholder="Select delivery time">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Additional Instructions</label>
+      <textarea class="form-control" rows="3" placeholder="e.g. Leave it by the gate or call before delivery."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-warning w-100">Proceed to Payment</button>
+  </form>
+
+  <p class="text-center mt-4"><a href="index.html">← Back to Services</a></p>
+</div>
+
+<footer>
+  <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+</footer>
+
+<script type="module">
+  import { db } from "./js/firebase.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  document.querySelector("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("full-name").value;
+    const phone = document.getElementById("phone").value;
+    const subject = document.getElementById("subject").value;
+    const deadline = document.getElementById("deadline").value;
+    const instructions = document.getElementById("instructions").value;
+
+    // Set base price + 5 GHS per day remaining
+    const daysLeft = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+    const price = 20 + (daysLeft > 0 ? 5 * daysLeft : 0);
+
+    try {
+      const docRef = await addDoc(collection(db, "assignmentRequests"), {
+        name,
+        phone,
+        subject,
+        deadline,
+        instructions,
+        price,
+        timestamp: serverTimestamp()
+      });
+
+      // Redirect to payment page with pre-filled values
+      const params = new URLSearchParams({
+        orderType: "assignment",
+        amount: price,
+        name: name.replace(/\s+/g, "-") + "-" + subject.replace(/\s+/g, "-")
+      });
+      window.location.href = `payment.html?${params.toString()}`;
+    } catch (err) {
+      alert("Failed to submit. Please try again.");
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>

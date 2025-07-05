@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Connect - Food & Essentials Delivery</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+    }
+    .hero {
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      padding: 50px 20px;
+      text-align: center;
+      border-radius: 20px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .category-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 20px 0;
+      scroll-behavior: smooth;
+    }
+    .category-scroll .btn {
+      white-space: nowrap;
+      border-radius: 20px;
+    }
+    .product-card {
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .product-card:hover {
+      transform: scale(1.02);
+    }
+    .product-img {
+      height: 180px;
+      object-fit: cover;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      background: #f0f0f0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo Navbar -->
+  <nav class="navbar navbar-light bg-light px-3">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/logo-campusconnect.png" alt="Campus Connect Logo">
+      <span class="fw-bold">Campus Connect</span>
+    </a>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="hero">
+      <h1>Get Your Favorite Meals, Snacks & Groceries</h1>
+      <p>Fast delivery on campus. Pay with MoMo, Card or Cash on Delivery</p>
+      <div class="input-group mt-4 w-75 mx-auto">
+        <input id="location-input" type="text" class="form-control" placeholder="Enter your hall or location..." />
+        <button onclick="setLocation()" class="btn btn-dark">Set Location</button>
+      </div>
+    </div>
+
+    <h4 class="mt-5 mb-3">Browse by Category</h4>
+    <div class="category-scroll">
+      <button class="btn btn-outline-primary">🍕 Pizza</button>
+      <button class="btn btn-outline-primary">🥤 Drinks</button>
+      <button class="btn btn-outline-primary">🍔 Burgers</button>
+      <button class="btn btn-outline-primary">🥗 Local Foods</button>
+      <button class="btn btn-outline-primary">🛒 Groceries</button>
+      <button class="btn btn-outline-primary">🍱 Rice & Meals</button>
+      <button class="btn btn-outline-primary">🍗 Shawarma</button>
+    </div>
+
+    <h4 class="mt-4">Popular Near You</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+      <div class="col">
+        <div class="card product-card">
+          <img src="images/Noodles.jpg" class="card-img-top product-img" alt="Jollof Rice" />
+          <div class="card-body">
+            <h5 class="card-title">Spaghetti/Noodles + Chicken</h5>
+            <p class="card-text">From Brago & Tima's Kitchen</p>
+            <p class="fw-bold">GHS 25.00</p>
+            <button onclick="orderNow('Spaghetti/Noodles + Chicken', 25)" class="btn btn-success w-100">Order Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card product-card">
+          <img src="images/pizza.jpg" class="card-img-top product-img" alt="Pizza" />
+          <div class="card-body">
+            <h5 class="card-title">Beefy Cheese Pizza</h5>
+            <p class="card-text">Hot & cheesy from Pizza Hub</p>
+            <p class="fw-bold">GHS 45.00</p>
+            <button onclick="orderNow('Beefy Cheese Pizza', 45)" class="btn btn-success w-100">Order Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card product-card">
+          <img src="images/groceries.jpg" class="card-img-top product-img" alt="Groceries" />
+          <div class="card-body">
+            <h5 class="card-title">Student Grocery Pack</h5>
+            <p class="card-text">Bread, milk, soap, sugar</p>
+            <p class="fw-bold">GHS 35.00</p>
+            <button onclick="orderNow('Student Grocery Pack', 35)" class="btn btn-success w-100">Order Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Campus Connect. Built to serve students with speed and flavor.</p>
+  </footer>
+
+  <!-- Firestore Integration & Redirect -->
+  <script type="module">
+    import { db } from "./js/firebase.js";
+    import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    window.setLocation = () => {
+      const loc = document.getElementById("location-input").value;
+      sessionStorage.setItem("userLocation", loc);
+    };
+
+    window.orderNow = async (item, price) => {
+      const location = sessionStorage.getItem("userLocation") || "Unknown Location";
+      const name = prompt("Enter your name to confirm order:");
+      if (!name) return;
+
+      try {
+        await addDoc(collection(db, "foodOrders"), {
+          name,
+          item,
+          price,
+          location,
+          timestamp: serverTimestamp()
+        });
+
+        const params = new URLSearchParams({
+          orderType: "food",
+          amount: price,
+          name: name.replace(/\s+/g, "-") + "-" + item.replace(/\s+/g, "-")
+        });
+        window.location.href = `payment.html?${params.toString()}`;
+      } catch (err) {
+        alert("Failed to place order. Please try again.");
+        console.error(err);
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Campus Connect - Private Tutor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #f0fdf4, #ecfdf5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background-color: #10b981;
+    }
+    .navbar-brand, .btn-outline-light {
+      color: white !important;
+    }
+    .tutor-container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      padding: 40px 30px;
+    }
+    h2 {
+      font-weight: 700;
+      color: #065f46;
+    }
+    .btn-success {
+      background-color: #10b981;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+    }
+    .btn-success:hover {
+      background-color: #059669;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      background: #d1fae5;
+      text-align: center;
+      color: #047857;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg px-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/logo.png" alt="Campus Connect Logo" style="height: 40px; margin-right: 10px;" />
+      <span class="fw-bold fs-4">Campus Connect</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Form Container -->
+<div class="container tutor-container">
+  <h2 class="text-center mb-4">Book a Private Tutor</h2>
+  <form onsubmit="redirectToPayment(event)">
+    <input type="hidden" id="order-type" value="Private Tutor">
+
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" id="name" class="form-control" placeholder="Your name" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Course / Subject</label>
+      <input type="text" class="form-control" placeholder="e.g. Mathematics 102" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Location / Hall</label>
+      <input type="text" class="form-control" placeholder="e.g. Atlantic Hall, Room 14" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Preferred Date</label>
+      <input type="date" class="form-control" required placeholder="Select a date" title="Preferred Date">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Preferred Time</label>
+      <input type="time" class="form-control" required placeholder="Select a time" title="Preferred Time">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Additional Notes</label>
+      <textarea class="form-control" rows="3" placeholder="e.g. Focus on calculus section, bring past questions."></textarea>
+    </div>
+
+    <input type="hidden" id="amount" value="40">
+
+    <button type="submit" class="btn btn-success w-100">Proceed to Payment</button>
+  </form>
+
+  <p class="text-center mt-4"><a href="index.html">← Back to Services</a></p>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+</footer>
+
+<script type="module">
+  import { db } from "./js/firebase.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  document.querySelector("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("full-name").value;
+    const phone = document.getElementById("phone").value;
+    const subject = document.getElementById("subject").value;
+    const deadline = document.getElementById("deadline").value;
+    const instructions = document.getElementById("instructions").value;
+
+    // Set base price + 5 GHS per day remaining
+    const daysLeft = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+    const price = 20 + (daysLeft > 0 ? 5 * daysLeft : 0);
+
+    try {
+      const docRef = await addDoc(collection(db, "assignmentRequests"), {
+        name,
+        phone,
+        subject,
+        deadline,
+        instructions,
+        price,
+        timestamp: serverTimestamp()
+      });
+
+      // Redirect to payment page with pre-filled values
+      const params = new URLSearchParams({
+        orderType: "assignment",
+        amount: price,
+        name: name.replace(/\s+/g, "-") + "-" + subject.replace(/\s+/g, "-")
+      });
+      window.location.href = `payment.html?${params.toString()}`;
+    } catch (err) {
+      alert("Failed to submit. Please try again.");
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>
