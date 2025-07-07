@@ -1,10 +1,10 @@
-// auth.js
 import { auth, db } from './firebase.js';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import {
@@ -12,6 +12,16 @@ import {
   setDoc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// Force logout flag on every page load
+if (localStorage.getItem('forceLogout') === 'true') {
+  localStorage.removeItem('forceLogout');
+  signOut(auth).then(() => {
+    if (!window.location.pathname.includes('login.html')) {
+      window.location.href = 'login.html';
+    }
+  });
+}
 
 // LOGIN
 if (window.location.pathname.includes("login.html")) {
@@ -28,10 +38,8 @@ if (window.location.pathname.includes("login.html")) {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Store or update the role
       await setDoc(doc(db, 'users', user.uid), { role }, { merge: true });
 
-      // Redirect based on role
       if (role === 'Admin') {
         window.location.href = 'admin.html';
       } else if (role === 'Service Provider') {
@@ -82,9 +90,31 @@ if (window.location.pathname.includes("signup.html")) {
   });
 }
 
+// RESET PASSWORD
+if (window.location.pathname.includes("reset-password.html")) {
+  const resetForm = document.getElementById('reset-password-form');
+  resetForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('reset-email').value.trim();
+    const messageDisplay = document.getElementById('reset-message');
+    const errorDisplay = document.getElementById('reset-error');
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      messageDisplay.textContent = "Reset link sent! Check your email.";
+      errorDisplay.textContent = "";
+    } catch (error) {
+      errorDisplay.textContent = error.message;
+      messageDisplay.textContent = "";
+    }
+  });
+}
+
 // LOGOUT
 window.logout = async function () {
   try {
+    localStorage.setItem('forceLogout', 'true');
     await signOut(auth);
     window.location.href = 'login.html';
   } catch (error) {
@@ -96,35 +126,53 @@ window.logout = async function () {
 onAuthStateChanged(auth, async (user) => {
   const userInfo = document.getElementById('user-info');
   const logoutBtn = document.getElementById('logout-btn');
+  const dashboardBtn = document.getElementById('dashboard-btn');
+  const loginBtn = document.getElementById('login-btn');
+  const signupBtn = document.getElementById('signup-btn');
 
   if (user) {
-    const userDoc = await getDoc(doc(db, 'users', user.uid));
-    const data = userDoc.data();
-    const role = data?.role || 'student';
+    try {
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const data = userDoc.data();
+      const role = data?.role || 'User';
 
-    if (userInfo) {
-      userInfo.textContent = `Welcome, ${data?.username || user.email}`;
-    }
-    if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      if (userInfo) userInfo.textContent = `Welcome, ${data?.username || user.email}`;
 
-    // Redirect if already logged in and visiting login/signup
-    if (window.location.pathname.includes('login.html') || window.location.pathname.includes('signup.html')) {
-      if (role === 'Admin') {
-        window.location.href = 'admin.html';
-      } else if (role === 'Service Provider' && user.email === "ahinsahnana7@gmail.com") {
-        window.location.href = 'service-provider.html';
-      } else {
-        window.location.href = 'index.html';
+      document.querySelectorAll('.role-only').forEach(el => {
+        const allowedRole = el.getAttribute('data-role');
+        el.style.display = allowedRole === role ? 'block' : 'none';
+      });
+
+      const path = window.location.pathname;
+      if (path.includes('login.html') || path.includes('signup.html')) {
+        if (role === 'Admin') {
+          window.location.href = 'admin.html';
+        } else if (role === 'Service Provider' && user.email === "ahinsahnana7@gmail.com") {
+          window.location.href = 'service-provider.html';
+        } else {
+          window.location.href = 'index.html';
+        }
       }
-    }
-  } else {
-    if (userInfo) userInfo.textContent = '';
-    if (logoutBtn) logoutBtn.style.display = 'none';
 
-    // Protect private pages
-    const path = window.location.pathname;
-    const restrictedPages = ['index.html', 'admin.html', 'dashboard.html', 'service-provider.html'];
-    if (restrictedPages.some(p => path.includes(p))) {
+    } catch (error) {
+      console.error('Error getting user role:', error.message);
+    }
+
+  } else {
+    if (dashboardBtn) dashboardBtn.style.display = 'none';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+    if (loginBtn) loginBtn.style.display = 'inline-block';
+    if (signupBtn) signupBtn.style.display = 'inline-block';
+    if (userInfo) userInfo.textContent = '';
+
+    const restrictedPages = ['dashboard.html', 'admin.html', 'service-provider.html'];
+    const currentPath = window.location.pathname;
+
+    if (restrictedPages.some(page => currentPath.includes(page))) {
       window.location.href = 'login.html';
     }
   }

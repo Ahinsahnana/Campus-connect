@@ -88,8 +88,8 @@
     <div class="ms-auto d-flex gap-2">
       <a href="login.html" id="login-btn" class="btn btn-outline-light">Login</a>
       <a href="signup.html" id="signup-btn" class="btn btn-outline-light">Sign Up</a>
-      <a href="dashboard.html" class="btn btn-light">Dashboard</a>
-      <button id="logout-btn" class="btn btn-danger" style="display: none;">Logout</button>
+      <a href="dashboard.html" id="dashboard-btn" class="btn btn-light" style="display: none;">Dashboard</a>
+      <button id="logout-btn" class="btn btn-danger" style="display: none;" onclick="logout()">Logout</button>
     </div>
   </div>
 </nav>
@@ -150,7 +150,7 @@
           <img src="images/services/assignment.jpg" class="img-fluid mb-2" alt="Assignment Help">
           <h5>Assignment Help</h5>
           <p>Get academic support for your assignments.</p>
-          <a href="asignment-help.html" class="btn btn-service">Order Now</a>
+          <a href="assignment-help.html" class="btn btn-service">Order Now</a>
         </div>
       </div>
       <div class="col-md-3">
@@ -212,34 +212,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module">
-  import { auth } from './js/firebase.js';
-  import { onAuthStateChanged, signOut } from 'firebase/auth';
-
-  const loginBtn = document.getElementById('login-btn');
-  const signupBtn = document.getElementById('signup-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loginBtn.style.display = 'none';
-      signupBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
-    } else {
-      loginBtn.style.display = 'inline-block';
-      signupBtn.style.display = 'inline-block';
-      logoutBtn.style.display = 'none';
-    }
-  });
-
-  logoutBtn?.addEventListener('click', async () => {
-    try {
-      await signOut(auth);
-      window.location.href = 'login.html';
-    } catch (error) {
-      alert('Logout failed: ' + error.message);
-    }
-  });
-</script>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBhLuIhRH619e6aVMxSsojSjq-3MeSkoMI",
   authDomain: "campus-connect-3b8bb.firebaseapp.com",
   projectId: "campus-connect-3b8bb",
-  storageBucket: "campus-connect-3b8bb.firebasestorage.app",
+  storageBucket: "campus-connect-3b8bb.appspot.com", // ✅ Corrected
   messagingSenderId: "544560691160",
   appId: "1:544560691160:web:f8158346d3b6a70f8ca4ad",
   measurementId: "G-8HPVC6B95Y"
